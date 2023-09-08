@@ -21,7 +21,7 @@ CPP_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.cpp))
 H_FILES := $(foreach dir,include,$(wildcard $(dir)/*.h))
 O_FILES := $(foreach f,$(CPP_FILES:.cpp=.o),build/$f)
 
-OUTPUT := program.out
+OUTPUT := cole.out
 
 # create build directory
 $(shell mkdir -p $(foreach dir,$(SRC_DIRS),build/$(dir)))
