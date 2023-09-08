@@ -14,6 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Install Requirements
-      run: sudo apt-get update && sudo apt-get install qt6-tools-dev
+      run: sudo apt-get update && sudo apt-get install qt6-tools-dev libgl-dev
     - name: Build
       run: make -j
