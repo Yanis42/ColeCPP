@@ -25,7 +25,7 @@ SRC_DIRS := src
 CPP_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.cpp))
 H_FILES := $(foreach dir,include,$(wildcard $(dir)/*.h))
 O_FILES := $(foreach f,$(CPP_FILES:.cpp=.o),build/$f)
-LIBS = $(SUBLIBS) $(QT_LIBS)
+LIBS = $(SUBLIBS) $(QT_LIBS) /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so -lpthread -lGLX -lOpenGL
 
 OUTPUT := cole.out
 
