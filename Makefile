@@ -41,7 +41,10 @@ clean:
 format:
 	clang-format-14 -i $(H_FILES) $(CPP_FILES)
 
-.PHONY: all clean format
+ui_to_h:
+	uic -o include/MainWindow.h res/MainWindow.ui
+
+.PHONY: all clean format ui_to_h
 
 build/src/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) $(OPTFLAGS) $(INC) -c $(OUTPUT_OPTION) $<

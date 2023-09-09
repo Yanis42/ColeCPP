@@ -1,22 +1,16 @@
 #include <QApplication>
-#include <QUiLoader>
 #include <QtCore>
-#include <QtWidgets>
+#include "MainWindow.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
-    QUiLoader loader;
-    QWidget* widget;
-    QFile file("res/MainWindow.ui");
-
-    file.open(QFile::ReadOnly);
-    widget = loader.load(&file, nullptr);
-    file.close();
-
-    widget->show();
+    QMainWindow* mainWindow = new QMainWindow;
+    Ui::MainWindow ui;
+    ui.setupUi(mainWindow);
+    mainWindow->show();
 
     return app.exec();
 }
