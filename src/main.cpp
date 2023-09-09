@@ -7,10 +7,8 @@ using namespace std;
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
-    QMainWindow* mainWindow = new QMainWindow;
-    Ui::MainWindow ui;
-    ui.setupUi(mainWindow);
-    mainWindow->show();
+    MainWindow mainWindow;
+    mainWindow.show();
 
     return app.exec();
 }

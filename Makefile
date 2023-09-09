@@ -4,8 +4,8 @@ else
   CXX := g++
 endif
 
-QT_INC := -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtUiTools -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++
-QT_LIBS := /usr/lib/x86_64-linux-gnu/libQt6UiTools.so /usr/lib/x86_64-linux-gnu/libQt6Widgets.so /usr/lib/x86_64-linux-gnu/libQt6Gui.so /usr/lib/x86_64-linux-gnu/libQt6Core.so
+QT_INC := -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++
+QT_LIBS := /usr/lib/x86_64-linux-gnu/libQt6Widgets.so /usr/lib/x86_64-linux-gnu/libQt6Gui.so /usr/lib/x86_64-linux-gnu/libQt6Core.so
 
 DEFINES = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CXXFLAGS := -std=c++17 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
@@ -24,7 +24,8 @@ endif
 SRC_DIRS := src
 CPP_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.cpp))
 H_FILES := $(foreach dir,include,$(wildcard $(dir)/*.h))
-O_FILES := $(foreach f,$(CPP_FILES:.cpp=.o),build/$f)
+MOC_FILES := $(subst include,src,$(H_FILES:.h=.moc.cpp))
+O_FILES := $(foreach f,$(CPP_FILES:.cpp=.o),build/$f) $(foreach f,$(MOC_FILES:.moc.cpp=.moc.o),build/$f)
 LIBS = $(SUBLIBS) $(QT_LIBS) /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so -lpthread -lGLX -lOpenGL
 
 OUTPUT := cole.out
@@ -33,7 +34,7 @@ OUTPUT := cole.out
 $(shell mkdir -p $(foreach dir,$(SRC_DIRS),build/$(dir)))
 
 # main targets
-all: $(OUTPUT)
+all: ui_to_h genmoc $(OUTPUT)
 
 clean:
 	rm -rf build $(OUTPUT)
@@ -42,9 +43,15 @@ format:
 	clang-format-14 -i $(H_FILES) $(CPP_FILES)
 
 ui_to_h:
-	uic -o include/MainWindow.h res/MainWindow.ui
+	uic -o include/UiMainWindow.h res/UiMainWindow.ui
 
-.PHONY: all clean format ui_to_h
+genmoc:
+	$(MAKE) $(foreach f,$(MOC_FILES),$f)
+
+.PHONY: all clean format ui_to_h genmoc
+
+src/%.moc.cpp: include/%.h
+	moc $(INC) $< -o $@
 
 build/src/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) $(OPTFLAGS) $(INC) -c $(OUTPUT_OPTION) $<
