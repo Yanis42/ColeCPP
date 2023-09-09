@@ -8,16 +8,14 @@ on:
 
 jobs:
   build:
+    name: Build C/C++
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
     - name: Install Requirements
-      run: |
-        sudo apt-get update
-        sudo apt-get install qt6-tools-dev libgl-dev
-        sudo cp /usr/lib/qt6/libexec/uic /usr/lib/qt6/bin/uic
-        sudo cp /usr/lib/qt6/libexec/moc /usr/lib/qt6/bin/moc
+      run: sudo apt-get update && sudo apt-get install qt6-tools-dev libgl-dev
+
     - name: Build
       run: make -j

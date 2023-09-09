@@ -29,6 +29,8 @@ O_FILES := $(foreach f,$(CPP_FILES:.cpp=.o),build/$f) $(foreach f,$(MOC_FILES:.m
 LIBS = $(SUBLIBS) $(QT_LIBS) /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so -lpthread -lGLX -lOpenGL
 
 OUTPUT := cole.out
+UIC := /usr/lib/qt6/libexec/uic
+MOC := /usr/lib/qt6/libexec/moc
 
 # create build directory
 $(shell mkdir -p $(foreach dir,$(SRC_DIRS),build/$(dir)))
@@ -43,7 +45,7 @@ format:
 	clang-format-14 -i $(H_FILES) $(CPP_FILES)
 
 ui_to_h:
-	uic -o include/UiMainWindow.h res/UiMainWindow.ui
+	$(UIC) -o include/UiMainWindow.h res/UiMainWindow.ui
 
 genmoc:
 	$(MAKE) $(foreach f,$(MOC_FILES),$f)
@@ -51,7 +53,7 @@ genmoc:
 .PHONY: all clean format ui_to_h genmoc
 
 src/%.moc.cpp: include/%.h
-	moc $(INC) $< -o $@
+	$(MOC) $(INC) $< -o $@
 
 build/src/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) $(OPTFLAGS) $(INC) -c $(OUTPUT_OPTION) $<
